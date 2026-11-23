@@ -323,8 +323,10 @@ enum BackupImporter {
         return result
     }
 
+    /// Accepts "2026-11-01T20:00:00Z" and, from other sources, "2026-11-01T20:00:00.000Z".
     private static func parseISO(_ text: String) -> Date? {
-        try? Date.ISO8601FormatStyle().parse(text)
+        (try? Date.ISO8601FormatStyle().parse(text))
+            ?? (try? Date.ISO8601FormatStyle(includingFractionalSeconds: true).parse(text))
     }
 
     /// "YYYY-MM-DD" from the web app, placed at noon local time.
